@@ -17,10 +17,18 @@ This project is an e-commerce website designed to provide a seamless online shop
 - Backend: Node.js, Express
 - Database: MongoDB
 - Authentication: JWT
-- Payment Gateway: Stripe
 
 ## Installation
 1. **Clone the repository:**
    ```bash
    git clone https://github.com/yourusername/ecommerce-website.git
    cd ecommerce-website
+
+2. **Install packages:**
+   ```terminal
+   npm i to install packages
+
+3. **Start server**
+   ```terminal
+   npm start to start server
+   

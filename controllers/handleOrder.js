@@ -11,7 +11,7 @@ let handlePrepareOrder = async(req,res)=>{
         let preparedOrder = []
         let productsList = userCart.products
         for(let i=0;i<productsList.length;i++){
-            let query ='SELECT PD.ID,PD.NAME,PD.CATEGORY,PD.BRAND,PD.THUMBNAIL,PD.SELLEREMAILID,PM.PRICE,PM.VOLUME,PM.LISTED FROM PRODUCTDETAILS AS PD JOIN PRODUCTMETRICS AS PM ON PD.ID=PM.ID WHERE PD.ID=?'
+            let query ='SELECT PD.ID,PD.NAME,PD.CATEGORY,PD.BRAND,PD.THUMBNAIL,PD.SELLEREMAILID,PM.PRICE,PM.DISCOUNT,PM.VOLUME,PM.LISTED FROM PRODUCTDETAILS AS PD JOIN PRODUCTMETRICS AS PM ON PD.ID=PM.ID WHERE PD.ID=?'
             let product = (await connect.execute(query,[(productsList[i]).productId]))[0]
             if(product.length==0){
                 preparedOrder.push({product:{productId:(productsList[i]).productId},available:false,quantity:productsList[i].quantity})
@@ -36,7 +36,7 @@ let handlePrepareOrder = async(req,res)=>{
                             category:product.CATEGORY,
                             brand:product.BRAND,
                             img:product.THUMBNAIL,
-                            price:product.PRICE,
+                            price: (product.PRICE-(product.PRICE*(product.DISCOUNT/100)).toFixed(2)),
                             sellerEmailId:product.SELLEREMAILID,
                             quantity:((productsList[i]).quantity>product.VOLUME) ? product.VOLUME:(productsList[i]).quantity
                         }
@@ -88,10 +88,9 @@ let handlePlaceOrder = async(req,res)=>{
         let {emailId} = req.session.userInfo
         let order = req.session.order
         order = order.filter(product=> product.available==true)
-        let orderId = `${Date.now()}-${req.session.userInfo.emailId}`
         let productList =[]
         order.forEach(element => {
-            productList.push({productId:element.product.productId,sellerEmailId:element.product.sellerEmailId,quantity:element.product.quantity})
+            productList.push({productId:element.product.productId,sellerEmailId:element.product.sellerEmailId,quantity:element.product.quantity,price:element.product.price})
         });
         let {address} = req.body
         if(!address.trim()){
@@ -112,8 +111,8 @@ let handlePlaceOrder = async(req,res)=>{
             index = index['max(id)']+1
         }
         for(let i=0;i<productList.length;i++){
-            let query = `INSERT INTO ORDERS VALUES(?,?,?,0,0,0,?,?,?,?)`
-            let queryArg =[index,emailId,Date.now(),productList[i].productId,address,productList[i].sellerEmailId,productList[i].quantity]
+            let query = `INSERT INTO ORDERS VALUES(?,?,?,0,0,0,?,?,?,?,?)`
+            let queryArg =[index,emailId,Date.now(),productList[i].productId,address,productList[i].sellerEmailId,productList[i].quantity,productList[i].price*productList[i].quantity]
             await connect.execute(query,queryArg)
             index++;
         }

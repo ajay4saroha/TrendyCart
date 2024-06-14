@@ -64,11 +64,7 @@ function sendReq(url,obj){
 
 
 ////// prepare order req ////
-function disableBtns(arr){
-    for(let i=0;i<arr.length;i++){
-       
-    }
-}
+
 let orderBtn = document.getElementById('prepareOrderBtn')
 orderBtn.addEventListener('click',()=>{
     fetch('/prepareOrderForUser',{

@@ -10,7 +10,7 @@ let handleDashboard = async(req,res)=>{
 }
 let handleGetOrders = async(req,res)=>{
     try{
-        let orders = (await connect.execute('SELECT id,orderedAt,dispatchedAt,outForDeliveryAt,deliveredAt,address FROM ORDERS AS O WHERE dispatchedAt!=0 ORDER BY DISPATCHEDAT DESC'))[0]
+        let orders = (await connect.execute('SELECT id,orderedBy,dispatchedAt,outForDeliveryAt,deliveredAt,address,bill FROM ORDERS AS O WHERE dispatchedAt!=0 ORDER BY DISPATCHEDAT DESC'))[0]
         if(orders.length==0){
             res.status(304).send()
             return

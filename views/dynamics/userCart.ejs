@@ -5,6 +5,7 @@
         <script>location.href='/'</script>
     <%} else{ %>
         <% let flag = false%>
+
         <% for(let i=0;i<data.length;i++){ %>
             <% flag = true %>
             <div class="row m-lg-5 m-md-3 m-sm-1 border border-primary rounded-5 p-lg-2 p-md-1 p-sm-1" id="<%= (data[i]).product.ID%>">
@@ -16,7 +17,10 @@
                         <h4 class="card-title"><%= (data[i]).product.NAME %></h4>
                         <ul>
                             <li><%= (data[i]).product.CATEGORY %></li>
-                            <li><%= (data[i]).product.PRICE %></li>
+                            <li class="">$<%= (data[i]).product.PRICE %></li>
+                            <% if(data[i].product.DISCOUNT){ %>
+                                <li class="text-danger"><%= (data[i]).product.DISCOUNT %>% OFF</li>
+                            <% } %>
                             <li><%= (data[i]).product.BRAND %></li>
                             <li id="<%= (data[i]).product.ID%>-NoOfItems"><%= (data[i]).quantity %></li>
                             <li><%= (data[i]).product.DESCRIPTION %></li>

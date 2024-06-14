@@ -304,7 +304,8 @@ let handleGetUserOrders = async(req,res)=>{
     let orders = (await connect.execute('SELECT * FROM ORDERS WHERE ORDEREDBY=?',[emailId]))[0]
     let orderList = []
     if(orders.length==0){
-      orderList=[]
+      res.redirect('/')
+      return
     }else{
       orders.forEach(async element => {
         let temp = {}
@@ -314,12 +315,13 @@ let handleGetUserOrders = async(req,res)=>{
         temp.outForDelivery = element.outForDeliveryAt ? true:false 
         temp.delivered = element.deliveredAt ? true:false
         temp.product = element.product
+        temp.price = element.bill
         temp.quantity = element.volume
         orderList.push(temp)
       });
     }
     for(let i=0;i<orderList.length;i++){
-      let item = (await connect.execute('SELECT PD.ID,PD.THUMBNAIL,PD.NAME,PD.CATEGORY,PM.PRICE,PD.BRAND FROM PRODUCTDETAILS AS PD JOIN PRODUCTMETRICS AS PM ON PD.ID=PM.ID WHERE PM.ID=?',[orderList[i].product]))[0]
+      let item = (await connect.execute('SELECT PD.ID,PD.THUMBNAIL,PD.NAME,PD.CATEGORY,PD.BRAND FROM PRODUCTDETAILS AS PD JOIN PRODUCTMETRICS AS PM ON PD.ID=PM.ID WHERE PM.ID=?',[orderList[i].product]))[0]
       if(item.length==0){
         orderList.filter(product=>product.product!==orderList[i].product)
       }

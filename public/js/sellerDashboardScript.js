@@ -72,7 +72,7 @@ function displayUpdateDiv(obj){
     volume.setAttribute('value',`${obj.VOLUME}`)
     discount.setAttribute('value',`${obj.DISCOUNT}`)
     description.innerHTML=`${obj.DESCRIPTION}`
-    if(obj.listed==true){
+    if(obj.LISTED){
         listed.checked=true
     }
     else{
@@ -101,7 +101,7 @@ function displayUpdateDiv(obj){
             alert('Enter discount properly')
             return;
         }
-        if (formData.price<0 || formData.price===0) {
+        if (formData.price<0 || formData.price===0){
             alert('Enter price');
             return;
         }
@@ -380,9 +380,17 @@ function displayOrders(data){
         mainDiv.innerHTML = ''
         let heading = document.createElement('h1')
         heading.setAttribute('class','text-center text-decoration-underline p-lg-3 p-md-2 p-sm-1')
-        heading.innerHTML = 'LISTED PRODUCTS'
+        heading.innerHTML = 'ORDERS'
         mainDiv.appendChild(heading)
         mainDiv.appendChild(table)
     }
 }
+
+///// get reporting ///////
+let getReporting = document.getElementById('ReportDiv')
+getReporting.addEventListener('click',()=>{
+    dispNone()
+    fetchReqForReporting()
+})
+
 

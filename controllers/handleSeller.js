@@ -86,7 +86,6 @@ let handleInsertNewProductDetails = async(req,res)=>{
         let updateDetails = 'UPDATE PRODUCTDETAILS AS PD SET NAME=?,BRAND=?,DESCRIPTION=? WHERE ID=?'
         let updateDetailsArg = [name,brand,description,id]
         let updateMetrics = 'UPDATE PRODUCTMETRICS AS PM SET PRICE=?,VOLUME=?,DISCOUNT=?,LISTED=? WHERE ID=?'
-        price = price - (price*discount)/100;
         let updateMetricsArg = [price,volume,discount,listed ? 1:0,id]
         let {NAME,BRAND,DESCRIPTION} = ((await connect.execute('SELECT NAME,BRAND,DESCRIPTION FROM PRODUCTDETAILS'))[0])[0]
         connect.execute(updateDetails,updateDetailsArg)
@@ -173,7 +172,7 @@ let handleAddNewProduct = async (req,res)=>{
 let handleSellerOrders = async(req,res)=>{
     try {
         const {emailId} = req.session.userInfo
-        let query = 'SELECT O.ID,O.ORDEREDBY,O.ORDEREDAT,O.DISPATCHEDAT,O.PRODUCT,O.VOLUME FROM ORDERS AS O WHERE SELLEREMAILID=? ORDER BY ORDEREDAT DESC'
+        let query = 'SELECT O.ID,O.ORDEREDAT,O.DISPATCHEDAT,O.PRODUCT,O.VOLUME,O.BILL FROM ORDERS AS O WHERE SELLEREMAILID=? ORDER BY ORDEREDAT DESC'
         let data= (await connect.execute(query,[emailId]))[0]
         res.status(200).json(data)
     } catch (error) {

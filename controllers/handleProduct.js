@@ -65,35 +65,7 @@ let handleAddToCart = async(req,res)=>{
       res.status(500).send()
    }
 }
-// let handleQuantityOfProductForUser = async(req,res)=>{
-//    if(!req.session.userInfo){
-//       res.status(400).send()
-//       return
-//    }
-//    try {
-//       const emailId = req.session.userInfo.emailId
-//       if(!emailId){
-//          res.status(302).send()
-//          return
-//       }
-//       let quantity = 0
-//       const {productId}=req.body
-//       let user = await userCart.findOne({emailId:emailId}).exec()
-//       if(!user){
-//          res.status(404).send()
-//          return
-//       }
-//       (user.products).forEach(element => {
-//          if(element.productId==productId && element.quantity){
-//             quantity = element.quantity
-//             return
-//          }
-//       });
-//       console.log(quantity)
-//    } catch (error) {
-//       console.log(error)
-//    }
-// }
+
 let handleLoadCart = async(req,res)=>{
    if(!req.session.userInfo){
       res.status(400).send()
@@ -129,7 +101,7 @@ try {
    resObj.emailId = emailId
    let productsList = user.products
    let resProductList = []
-   let searchProductQuery = 'SELECT PD.ID,PD.THUMBNAIL,PD.NAME,PD.CATEGORY,PM.PRICE,PD.BRAND,PD.DESCRIPTION FROM PRODUCTDETAILS AS PD JOIN PRODUCTMETRICS AS PM ON PD.ID=PM.ID WHERE PM.ID=?'
+   let searchProductQuery = 'SELECT PD.ID,PD.THUMBNAIL,PD.NAME,PD.CATEGORY,PM.PRICE,PM.DISCOUNT,PD.BRAND,PD.DESCRIPTION FROM PRODUCTDETAILS AS PD JOIN PRODUCTMETRICS AS PM ON PD.ID=PM.ID WHERE PM.ID=?'
    for(let i=0;i<productsList.length;i++){
       let product = ((await connect.execute(searchProductQuery,[(productsList[i]).productId]))[0])[0]
       if(product){

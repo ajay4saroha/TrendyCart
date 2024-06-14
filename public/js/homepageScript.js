@@ -92,10 +92,20 @@ function createTitle(title){
 }
 
 /////////// product  price //////////////
-function createPrice(price){
-    let pricetag = document.createElement('p')
+function createPrice(OrgPrice,disPrice){
+    let pricetag = document.createElement('div')
+    let p = document.createElement('p')
+    let d = document.createElement('span')
     pricetag.setAttribute('class','ps-lg-2 ps-sm-1 ps-md-2')
-    pricetag.innerHTML=`$${price}`
+    p.innerHTML=`$${OrgPrice}`
+    d.innerHTML = `${disPrice}`
+    if(OrgPrice!==disPrice){
+        p.setAttribute('class','text-decoration-line-through')
+        pricetag.appendChild(d)
+    }
+    else{
+        pricetag.appendChild(p)
+    }
     return pricetag
 }
 
@@ -117,7 +127,8 @@ let createCard=(obj)=>{
     card.setAttribute('id',obj.ID)
     card.appendChild(createImage(obj.THUMBNAIL))
     card.appendChild(createTitle(obj.NAME))
-    card.appendChild(createPrice(obj.PRICE))
+    let disPrice = (obj.PRICE - obj.PRICE*(obj.DISCOUNT/100)).toFixed(2)
+    card.appendChild((createPrice(obj.PRICE,disPrice)))
     card.appendChild(createProductBtnDiv(obj))
     return card
 }
