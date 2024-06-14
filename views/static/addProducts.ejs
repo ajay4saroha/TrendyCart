@@ -1,0 +1,163 @@
+
+<h1 class="text-center text-decoration-underline mt-2">ADD PRODUCTS</h1>
+<form id="addProductForm" class="row g-3 needs-validation m-lg-3 m-md-2 justify-content-lg-center" enctype="multipart/form-data">
+    <div class="row">
+        <div class="mb-3 col-lg-6">
+            <input
+                type="text"
+                class="form-control"
+                name="productName"
+                id="productName"
+                aria-label="default input example"
+                placeholder="Enter Product Name"
+                required
+            />
+        </div>
+        <div class="mb-3 col-lg-6">
+            <select
+                class="form-select"
+                name="category"
+                id="category"
+                required
+            >
+                <option value="Electronics">Electronics</option>
+                <option value="Fashion and Apparel">Fashion and Apparel</option>
+                <option value="Health and Beauty">Health and Beauty</option>
+                <option value="Home and Garden">Home and Garden</option>
+                <option value="Food and Beverage">Food and Beverage</option>
+                <option value="Books and Media">Books and Media</option>
+                <option value="Sports and Outdoors">Sports and Outdoors</option>
+                <option value="Toys and Games">Toys and Games</option>
+                <option value="Automotive">Automotive</option>
+            </select>
+        </div>
+    </div>
+    <div class="mb-3">
+        <textarea class="form-control" name="description" id="description" rows="3"placeholder="Description of product" required></textarea>
+    </div>
+    <div class="row">
+        <div class="mb-3 col-lg-4">
+            <input
+                type="number"
+                class="form-control"
+                name="price"
+                id="price"
+                aria-describedby="helpId"
+                placeholder="Enter Price of product"
+                min="1"
+                required
+            />
+        </div>
+        <div class="mb-3 col-lg-4">
+            <input
+                type="text"
+                class="form-control"
+                name="volume"
+                id="volume"
+                aria-describedby="helpId"
+                placeholder="Enter volume/quantity of product"
+            />
+        </div>
+        <div class="mb-3 col-lg-4">
+            <input
+                type="text"
+                class="form-control"
+                name="brand"
+                id="brand"
+                aria-describedby="helpId"
+                placeholder="Enter brand name"
+            />
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="thumnail">Image for thumnial</label>
+        <input
+            type="file"
+            class="form-control"
+            name="image"
+            id="image"
+            placeholder=""
+            accept="image/*"
+            required
+        />
+    </div>
+    <div class="mb-3">
+        <label for="thumnail">Other Images of Products</label>
+        <input
+            type="file"
+            class="form-control"
+            name="images"
+            id="images"
+            placeholder=""
+            accept="image/*"
+            multiple
+        />
+    </div>
+    <button
+        type="submit"
+        class="btn btn-primary"
+    >
+        Add product
+    </button>
+</form>
+<script>
+    let addProductForm = document.getElementById('addProductForm')
+    addProductForm.addEventListener('submit',(event)=>{
+        event.preventDefault()
+        let formData = new FormData(addProductForm)
+        let sellerEmailId = document.getElementById('sellerEmailId').innerText
+        let formDataObj = {}
+        formData.append('sellerEmailId',sellerEmailId)
+        formDataObj.sellerEmailId = sellerEmailId
+        formData.forEach((value,key) => {
+           formDataObj[key] = value 
+        });
+        console.log(formDataObj)
+        if(!(formDataObj.productName).trim()){
+            alert('Enter product name');
+            return
+        }
+        if(!(formDataObj.category).trim()){
+            alert('Choose category')
+            return
+        }
+        if(!(formDataObj.description).trim()){
+            alert('Enter a proper description')
+            return
+        }
+        if(!(formDataObj.price).trim()){
+            alert('Enter price')
+            return
+        }
+        if(!(formDataObj.brand).trim()){
+            alert('Enter brand name')
+            return
+        }
+        // let formData = new FormData()
+        // formData.append('sellerEmailId',sellerEmailId)
+        // formData.append('image',document.getElementById('image').files[0])
+        // formData.forEach((value,key) => {
+        //    console.log(key,value) 
+        // });
+        fetch('/addNewProduct',{
+            method:'post',
+            body:formData
+        }).then(res=>{
+            if(res.status==200){
+                alert('Product added successfully')
+                location.href='/sellerDashboard'
+            }
+            else if(res.status==402){
+                alert('Product already exist')
+                location.href='/sellerDashboard'
+            }
+            else{
+                res=res.json()
+                console.log(res)
+                alert('Product not added try again')
+            }
+        })
+        .catch(err=>console.log(err))
+
+    })
+</script>

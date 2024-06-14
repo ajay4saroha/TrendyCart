@@ -1,0 +1,23 @@
+<style>
+    html,body{
+        overflow-x: hidden;
+    }
+</style>
+<div class="row">
+    <div class="col-lg-2 col-md-3 position-fixed bg-dark" style="height: 100vh;">
+        <%- include('../partials/dashboardNavbar.ejs') -%>
+        <nav
+            class="nav justify-content-center text-light w-100"
+        >
+        <div class="conatiner-fluid border-top w-100" id="manageOrdersNav">
+            <a class="nav-link  text-decoration-none text-light"  aria-current="page"><i class="bi bi-mailbox2  p-1"></i>Manage Orders</a>
+        </div>
+        <div class="conatiner-fluid border-top w-100" style="margin-top: 63vh;">
+            <a class="nav-link  text-decoration-none text-light" href="/logout" aria-current="page"><i class="bi bi-person-fill-slash p-1"></i>Logout</a>
+        </div>
+        </nav>
+    </div>
+    <div class="col-lg-10 col-md-3 " id="mainContentDiv" style="margin-left: 18%; "></div>
+
+</div>
+<script src="js/distributer.js"></script>

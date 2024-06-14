@@ -1,0 +1,28 @@
+<div class="container p-lg-4 p-md-2 p-sm-1">
+    <h1 class="text-center">NEW ADMIN</h1>
+    <hr>
+    <form id="addNewAdmin">
+        <div class="row">
+            <div class="col-lg-6">
+                <input type="text" class="form-control" placeholder="Enter first name" name="firstname" required >
+            </div>
+            <div class="col-lg-6">
+                <input type="text" class="form-control" placeholder="Enter last name" name="lastname" required >
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-lg-6">
+                <input type="email" class="form-control" placeholder="Enter email address" name="emailId" required >
+            </div>
+            <div class="col-lg-6">
+                <input type="password" class="form-control" placeholder="Enter password" name="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
+            </div>
+        </div>
+        <button
+            type="submit"
+            class="btn btn-primary mt-3"
+        >
+            Submit
+        </button>
+    </form>
+</div>

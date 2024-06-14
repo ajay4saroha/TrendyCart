@@ -1,0 +1,57 @@
+<%- include('../partials/navbar.ejs') -%>
+<div class="container ms-lg-5 me-lg-5">
+    
+    <%if(data.length==0){%>
+        <script>location.href='/'</script>
+    <%} else{ %>
+        <% let flag = false%>
+        <% for(let i=0;i<data.length;i++){ %>
+            <% flag = true %>
+            <div class="row m-lg-5 m-md-3 m-sm-1 border border-primary rounded-5 p-lg-2 p-md-1 p-sm-1" id="<%= (data[i]).product.ID%>">
+                <div class="col-lg-3 col-md-2 col-sm-6 d-flex justify-content-lg-center justify-content-md-center  justify-content-sm-center ">
+                    <img class="img-thumbnail" src="uploads/productsImages/<%=(data[i]).product.THUMBNAIL%>" alt="product image" />
+                </div>
+                <div class=" col-lg-6 col-md-7 col-sm-6 text-start">
+                    <div class="card-body">
+                        <h4 class="card-title"><%= (data[i]).product.NAME %></h4>
+                        <ul>
+                            <li><%= (data[i]).product.CATEGORY %></li>
+                            <li><%= (data[i]).product.PRICE %></li>
+                            <li><%= (data[i]).product.BRAND %></li>
+                            <li id="<%= (data[i]).product.ID%>-NoOfItems"><%= (data[i]).quantity %></li>
+                            <li><%= (data[i]).product.DESCRIPTION %></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-12 justify-content-lg-center justify-content-md-center justify-content-sm-center">
+                    <button
+                        type="button"
+                        class="btn btn-outline-danger m-lg-2 m-md-1 m-sm-1 w-100 btn-remove"
+                        onclick="removeProduct(`<%= (data[i]).product.ID%>`)"
+                    >
+                    Remove Product
+                    </button>
+                    <button
+                    type="button"
+                    class="btn btn-outline-success m-lg-2 m-md-1 m-sm-1 w-100 btn-increase"
+                    onclick="changeInQuantity(`<%= (data[i]).product.ID%>`,'increment')"
+                >
+                    Increase Quantity
+                </button>
+                <button
+                    type="button"
+                    class="btn btn-outline-secondary m-lg-2 m-md-1 m-sm-1 w-100 btn-decrease"
+                    onclick="changeInQuantity(`<%= (data[i]).product.ID%>`,'decrement')"
+                >
+                Decrease Quantity
+                </button>
+                </div>
+            </div>
+        <%}%>
+        <%if(!flag){%>
+            <script>location.href='/'</script>
+        <%}%>
+    <%}%>
+</div>
+<a class="m-lg-2 d-flex justify-content-lg-center text-decoration-none"><button class="btn btn-info p-lg-2 " id="prepareOrderBtn"><i class="bi bi-box-arrow-right"></i>Order Now</button></a>
+<%- include('../partials/footers.ejs')-%>

@@ -1,0 +1,57 @@
+
+<!DOCTYPE html >
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+</head>
+<body>
+    <%- include('../partials/navbar.ejs') -%>
+    <div class="container mt-lg-4 mt-md-2 justify-content-lg-center">
+        <h2 class=" text-decoration-underline text-center">PRODUCTS</h2>
+        <div id="products-grid" class="d-flex flex-column justify-content-lg-center"></div>
+        <div class="d-flex justify-content-lg-center">
+            <button
+            id="load-more-products-btn"
+            type="button"
+            class="btn btn-outline-info "
+            >
+            Load More
+        </button>
+        </div>
+    </div>
+    <div id="description" class="bg-dark border rounded-3 border-rounded w-50 p-lg-4 p-md-2 p-sm-1 position-fixed top-25 end-25" style="display: none;">
+        <div class="d-flex justify-content-lg-center text-light">
+            <h3 class=" text-decoration-underline text-start"> PRODUCT DESCRIPTION</h3>
+        <button
+            type="button"
+            class="btn btn-outline-danger ms-lg-4 ms-md-2 ms-sm-1"
+            id="descBtn"
+        >
+            CLOSE
+        </button>
+        </div>
+        <div id="productCarousel">
+            
+        </div>
+        <ul id="productDetails" class="text-light list-unstyled">
+            <label for="productName">Name</label>
+            <li id="productName"></li>
+            <hr>
+            <label for="productBrand">Brand</label>
+            <li id="productBrand"></li>
+            <hr>
+            <label for="productCategory">Category</label>
+            <li id="productCategory"></li>
+            <hr>
+            <label for="productPrice">Price</label>
+            <li id="productPrice"></li>
+            <hr>
+            <label for="productDescription">Description</label>
+            <li id="productDescription"></li>
+        </ul>
+    </div>
+    <%- include('../partials/footers.ejs')-%>
+</body>
+</html>

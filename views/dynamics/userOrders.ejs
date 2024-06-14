@@ -1,0 +1,38 @@
+<%- include('../partials/navbar.ejs') -%>
+<section class="container-fluid mt-3">
+    <% let orders = data.orders %>
+    <div class="row">
+        <% orders.forEach(element => { %>
+            <div class="col-lg-6">
+                <div class="row m-2 p-lg-2 border border-primary rounded-5" style="height: 350px;">
+                    <div class="col-lg-6">
+                        <img src="uploads/productsImages/<%=element.product.THUMBNAIL%>" alt=""  class="img-fluid border rounded-3 border-none" style="height: 200px;">
+                    </div>
+                    <div class="col-lg-6">
+                        <ul>
+                            <li><%=element.product.NAME%></li>
+                            <li><%=element.product.CATEGORY%></li>
+                            <li><%=(parseFloat(element.product.PRICE)).toFixed(2)%></li>
+                            <li><%=element.product.BRAND%></li>
+                            <li><%=element.quantity%></li>
+                        </ul>
+                    </div>
+                    <div class="row m-2">
+                        <% let bg ="bg-primary"%>
+                        <div class="col-3 border border-danger rounded-2 <%=(element.ordered) ? bg:'' %> " style="height: 5px;"></div>
+                        <div class="col-3 border border-danger  rounded-2 <%=(element.dispatched) ? bg:'' %>" style="height: 5px;"></div>
+                        <div class="col-3 border border-danger  rounded-2 <%=(element.outForDelivery) ? bg:'' %>" style="height: 5px;"></div>
+                        <div class="col-3 border border-danger  rounded-2 <%=(element.delivered) ? bg:'' %>" style="height: 5px;"></div>
+                    </div>
+                    <div class="row m-2 text-center">
+                        <div class="col-3">Ordered</div>
+                        <div class="col-3">Dispatched</div>
+                        <div class="col-3">Out for delivery</div>
+                        <div class="col-3">Delivered</div>
+                    </div>
+                </div>
+                
+            </div>
+        <% }); %>
+    </div>
+</section>

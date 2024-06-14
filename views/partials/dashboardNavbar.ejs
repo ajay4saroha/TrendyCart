@@ -1,0 +1,8 @@
+<link rel="stylesheet" href="css/main.css">
+<a href="<%= (data.role==='Admin') ? '/adminDashboard':'/sellerDashboard' %>" class="text-decoration-none">
+<h4 class="text-light m-1">
+    <i class="bi bi-person-circle p-1 m-2 m-sm-1"></i>
+    <%= data.name %>
+</h4>
+<p class="text-light text-end m-2 m-sm-1 p-1" id="sellerEmailId"><%= data.emailId %></p>
+</a>

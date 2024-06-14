@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Be a Seller</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <div class="container ">
+        <form id="sellerForm" class="bg-dark text-light p-lg-3">
+            <h1 class="text-center">You're one step behind to scale your bussiness :)</h1>
+            <div class="row">
+                <div class="mb-3 col-lg-6">
+                    <input
+                        type="text"
+                        class="form-control"
+                        name="vatNum"
+                        id="vatNum"
+                        aria-describedby="helpId"
+                        placeholder="Enter your VAT number"
+                        pattern="[A-Z0-9]{8,15}"
+                        maxlength=15
+                        required
+                    />
+                </div>
+                <div class="mb-3 col-lg-6">
+                    <input
+                        type="text"
+                        class="form-control"
+                        name="gstNum"
+                        id="gstNum"
+                        aria-describedby="helpId"
+                        placeholder="Enter your GSTIN"
+                        pattern="[A-Z0-9]{15}"
+                        maxlength=15
+                        required
+                    />
+                </div>
+            </div>
+            <div class="mb-3">
+                <input class="form-control" name="address" placeholder="Enter your shop/office address">
+            </div>
+            <button
+                type="submit"
+                class="btn btn-primary"
+            >
+                Start your journey :)
+            </button>
+        </form>
+    </div>
+    <script>
+        let sellerForm = document.getElementById('sellerForm')
+        sellerForm.addEventListener('submit',(event)=>{
+            event.preventDefault()
+            let formData = new FormData(sellerForm)
+            let reqObj = {}
+            formData.forEach((val,key) => {
+                reqObj[key] = val
+            });
+            fetch('/wantToBeASeller',{
+                method:'post',
+                headers:{
+                    'Content-type':'application/json'
+                },
+                body:JSON.stringify(reqObj)
+            })
+            .then(data=>{
+                if(data.status==200){
+                    alert('Request sent to admin\nOn approval you will recieve an email.')
+                    location.href='/'
+                }
+                else if(data.status==500){
+                    alert('Internal Server Error')
+                }
+            })
+            .catch(err=>{
+                alert(err)
+            })
+        })
+    </script>
+</body>
+</html>

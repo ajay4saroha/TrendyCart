@@ -1,0 +1,139 @@
+
+<div class="row w-100">
+    <div class="col-lg-2 col-md-2 bg-dark bg-cover position-fixed" style="height: 100vh">
+        <%- include('../partials/dashboardNavbar.ejs') -%>
+        <nav>
+            <ul
+                class="nav"
+            >
+                <li class="nav-item border-top w-100" id="listedProducts">
+                    <a class="nav-link text-light text-decoration-none" ><i class="bi bi-cart-check p-1"></i>Listed Products</a>
+                </li>
+                <li class="nav-item border-top w-100" title="new products" id="displayAddProductForm">
+                    <a class="nav-link text-light"><i class="bi bi-bag-plus p-1"></i>Add Product</a>
+                </li>
+                <li class="nav-item border-top w-100" title="new products" id="ordersDiv">
+                    <a class="nav-link text-light"><i class="bi bi-send-plus p-1"></i>Manage Orders</a>
+                </li>
+                <li class="nav-item border-top w-100" title="new products" style="margin-top: 65vh;">
+                    <a class="nav-link text-light" href="/logout"><i class="bi bi-box-arrow-left p-1"></i>Logout</a>
+                </li>
+            </ul>
+            </nav>
+    </div>
+    <div class="col-lg-10 col-md-10 container start-25 w-75" style="margin-left: 20%;" id="mainContentDiv">
+    </div>
+    <div id="updateProductFormDiv" class="position-fixed end-25 z-2 bg-dark w-50 " style="display: none;">
+            <h3 class="text-center m-2 text-light text-decoration-underline">UPDATE PRODUCT DETAILS <i class="bi bi-x-square-fill text-danger ms-lg-5 ms-md-4 ms-sm-2" id="updateFormDivClose"></i></h3>
+        <br> 
+         <form id="updateProductDetailsForm" class=" text-light">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="mb-3">
+                        <label for="" class="form-label" class="text-light">Name</label>
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="name"
+                            id="updateFormProductName"
+                            aria-describedby="helpId"
+                            value=""
+                            required
+                        />
+                        
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="mb-3">
+                        <label for="" class="form-label" class="text-light">Price</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            name="updateFormProductPrice"
+                            id="updateFormProductPrice"
+                            aria-describedby="helpId"
+                            value=""
+                            min=1
+                            required
+                        />
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="mb-3">
+                        <label for="" class="form-label" class="text-light">Brand</label>
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="brand"
+                            id="updateFormProductBrand"
+                            aria-describedby="helpId"
+                            value=""
+                            required
+                        />
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="mb-3">
+                         <label for="" class="form-label" class="text-light">Volume</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            name="volume"
+                            id="updateFormProductVolume"
+                            aria-describedby="helpId"
+                            value=""
+                            required
+                        />
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3 ">
+                <div class="col-lg-6">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="available" id="prductAvailabilityTrue" />
+                        <label class="form-check-label" for=""> Available </label>
+                    </div>
+                    <div class="form-check">
+                        <input
+                            class="form-check-input" type="radio" name="available" id="prductAvailabilityFalse" />
+                        <label class="form-check-label" for="">Not Available</label>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <label for="" class="form-label" class="text-light">Discount</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            name="discount"
+                            id="updateFormProductDiscount"
+                            aria-describedby="helpId"
+                            min=0
+                            max=80
+                            maxlength="2"
+                            value=""
+                            required
+                        />
+                </div>
+            </div>
+            <div class="mb-3 text-light">
+                <label for="" class="form-label" class="text-light">Description</label>
+                <textarea class="form-control" name="description" id="updateFormProductDesc" rows="3" required></textarea>
+            </div>
+            <button
+                id="updateFormSubmitBtn"
+                type="submit"
+                class="btn btn-outline-success d-inline"
+            >
+                Update
+            </button>
+        </form>
+    </div>
+    <div class="col-lg-10 col-md-10 container start-25 w-75 " style="margin-left: 20%; display: none;" id="addNewProductFormDiv">
+        <%- include('../static/addProducts.ejs') -%>
+    </div>
+</div>
+<script type="module" src="js/sellerDashboardScript.js"></script>
+

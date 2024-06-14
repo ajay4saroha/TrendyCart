@@ -1,0 +1,180 @@
+
+<link rel="stylesheet" href="css/main.css">
+    <nav class="navbar bg-dark sticky-top">
+        <a href="/" class="navbar-brand link-light ms-lg-4 ms-md-2">
+           <i></i> TrendyCart</a>
+        <% if(data){ %>
+            <div id="loggedInUserDiv" class="text-end me-lg-2 text-light d-flex">
+                <p class="pe-3 mt-lg-2"><%= data.name %></p>
+                <a href="/showUserCart" class="text-center text-decoration-none">
+                    <button
+                    type="button"
+                    class="btn btn-outline-warning m-lg-1"
+                    title="Your Cart"
+                >
+                <i class="bi bi-cart4"></i>
+                </button>
+                </a>
+                <% if(data.role==='Seller' || data.role==='Admin' || data.role==='Distributer'){ %>
+                    <a href="/sellerDashboard">
+                        <button
+                            type="button"
+                            class="btn btn-outline-info m-lg-1"
+                        >
+                        <i class="bi bi-person-bounding-box"></i>
+                        </button>
+                    </a>
+                <% }else{%>
+                        <a href="/reqToBecomeSeller">
+                            <button
+                                type="button"
+                                class="btn btn-outline-info m-lg-1"
+                                title="Want to be a seller"
+                            >
+                            Be a Seller
+                            </button>
+                        </a>
+                <%} %>
+                <a href="/getUserOrders"><button
+                    type="button"
+                    class="btn btn-success m-lg-1"
+                >
+                    <i class="bi bi-list-check"></i>
+                </button>
+                </a>
+                <a href="/logout"><button
+                    type="button"
+                    class="btn btn-outline-danger m-lg-1"
+                >
+                    Logout
+                </button>
+                </a>
+            </div>
+        <%} else{%>
+        <div id="loggedInUserDiv" style="display: none;" class="text-end me-lg-2 text-light">
+        </div>
+        <div class="text-end me-lg-2" id="loginSignUpDiv">
+            <a href="#" id="LoginBtn">
+                <button
+                    type="button"
+                    class="btn btn-outline-primary"
+                    title="Existing user">
+                    Login
+                </button>
+             </a>
+             <a href="#" id="RegisterBtn">
+                <button
+                    type="button"
+                    class="btn btn-outline-success"
+                    title="New User">
+                    Register
+                </button>
+             </a>
+        </div>
+        <%}%>
+    </nav>
+        <div class="container ms-lg-5 mt-lg-5 mt-md-4 mt-sm-2 w-50 bg-dark p-lg-4 p-md-2 pd-sm-1 text-light border rounded d-none z-3 end-25 top-25" id="loginDiv">
+            <form id="loginForm">
+                <div class="mb-3">
+                    <input
+                        type="email"
+                        class="form-control"
+                        name="LoginEmailId"
+                        id="LoginEmailId"
+                        aria-describedby="emailHelpId"
+                        placeholder="Enter your email address"
+                        required
+                    />
+                </div>
+                <div class="mb-3">
+                    <input
+                        type="password"
+                        class="form-control"
+                        name="LoginPassword"
+                        id="LoginPassword"
+                        placeholder="Enter your password"
+                        required
+                    />
+                </div>
+                <a href="/forgotPassword" class="text-decoration-none text-light d-block">Forgot Password</a>
+                <br>
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                    id="LoginSubmitBtn"
+                >
+                    Login
+                </button>
+                
+            </form>
+        </div>
+        <div class="container ms-lg-5 mt-lg-5 mt-md-4 mt-sm-2 w-50 bg-dark p-lg-4 p-md-2 pd-sm-1 text-light border rounded d-none z-3 end-25" id="RegisterDiv">
+            <form id="registerForm">
+                <div class="mb-3">
+                    <input
+                        type="text"
+                        class="form-control"
+                        name="firstname"
+                        id="firstname"
+                        placeholder="Enter your first name"
+                        required
+                    />
+                </div>
+                <div class="mb-3">
+                    <input
+                        type="text"
+                        class="form-control"
+                        name="lastname"
+                        id="lastname"
+                        placeholder="Enter your last name"
+                    />
+                </div>
+                <div class="mb-3">
+                    <input
+                        type="email"
+                        class="form-control"
+                        name="registerEmailId"
+                        id="registerEmailId"
+                        aria-describedby="emailHelpId"
+                        placeholder="Enter your email address"
+                        required
+                    />
+                </div>
+                <div class="mb-3">
+                    <input
+                        type="number"
+                        class="form-control"
+                        name="mobileNo"
+                        id="mobileNo"
+                        placeholder="Enter your mobile number"
+                        maxlength=12
+                        required
+                    />
+                </div>
+                <div class="mb-3">
+                    <input
+                        type="password"
+                        class="form-control"
+                        name="password"
+                        id="assword"
+                        placeholder="Enter password"
+                        minlength= 8
+                        required
+                    />
+                </div>
+                <div class="mb-3">
+                    <textarea class="form-control" name="address" id="address" rows="3" placeholder="Enter your address"></textarea>
+                </div>
+    
+                <button
+                    type="submit"
+                    class="btn btn-success"
+                    id="RegisterSubmitBtn"
+                >
+                    Register
+                </button>
+                
+            </form>
+        </div>
+   
+    
