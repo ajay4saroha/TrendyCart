@@ -49,7 +49,7 @@ app.post('/insertNewProductDetails',sellerRoute)
 app.post('/deleteProduct',sellerRoute)
 app.get('/getSellerOrders',sellerRoute)
 app.post('/dispatchOrder',sellerRoute)
-
+app.get('/getReportForSeller',sellerRoute)
 
 
 ////////// ADMIN ROUTE ////////
@@ -61,7 +61,8 @@ app.post('/rejectSeller',adminRoute)
 app.post('/addNewAdmin',adminRoute)
 app.post('/getAllProducts',adminRoute)
 app.post('/removeEntireProduct',adminRoute)
-
+app.get('/getBuyersReportForAdmin',adminRoute)
+app.get('/getSellersReportForAdmin',adminRoute)
 
 ////////// DISTRIBUTOR ROUTE ///////
 app.get('/distributerDashboard',distributerRoute)

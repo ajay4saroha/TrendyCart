@@ -13,10 +13,10 @@ function createRow(obj,count){
     x.innerHTML = count
     tr.appendChild(x)
     for(let key in obj){
-        if(key=='__v' || key=='thumbnailImg' || key=='images' || key=='sellerEmailId' || key=='ID' || key=='createdAt' || key=='updatedAt'){
+        if(key=='__v' || key=='thumbnailImg' || key=='images' || key=='sellerEmailId' || key=='ID' || key=='createdAt' || key=='updatedAt' || key=='id'){
             continue
         }
-        if(key=='PRICE'){
+        if(key=='PRICE' || key=='price'){
             obj[key] = parseFloat(obj[key]).toFixed(2)
         }
         let td = document.createElement('td')
@@ -46,7 +46,7 @@ function showUpdateForm(updateFormDiv){
 }
 
 function displayUpdateDiv(obj){
-    console.log(obj)
+
     let updateFormDiv = document.getElementById('updateProductFormDiv')
     let updateForm = document.getElementById('updateProductDetailsForm')
     let updateFormClose = document.getElementById('updateFormDivClose')
@@ -212,7 +212,8 @@ function dispatchOrder(obj){
 ///////////// create btn //////////
 function createBtn(obj,action){
     let btn = document.createElement('button')
-    btn.setAttribute('id',`${obj.ID}-${action}-btn`)
+    let id = obj.ID || obj.id
+    btn.setAttribute('id',`${id}-${action}-btn`)
     if(action=='delete'){
         btn.setAttribute('class','btn btn-outline-danger m-2')
         // btn.setAttribute('onclick',`updateProductDetails(${obj.ID})`)
@@ -270,11 +271,11 @@ function createProductBtnDiv(obj){
 function createTableHeader(arr){
     let thead = document.createElement('thead')
     let y = document.createElement('th')
-    y.setAttribute('class','p-lg-3 p-md-1 p-sm-1 border border-primary')
+    y.setAttribute('class','p-lg-1 p-md-1 p-sm-1 border border-primary')
     y.innerHTML='s.No'
     thead.appendChild(y)
     for(let i=0;i<arr.length;i++){
-        if(arr[i]=='__v' || arr[i]=='thumbnailImg' || arr[i]=='images' || arr[i]=='sellerEmailId' || arr[i]=='ID' || arr[i]=='createdAt' || arr[i]=='updatedAt'){
+        if(arr[i]=='__v' || arr[i]=='thumbnailImg' || arr[i]=='images' || arr[i]=='sellerEmailId' || arr[i]=='ID' || arr[i]=='createdAt' || arr[i]=='updatedAt' || arr[i]=='id'){
             continue
         }
         let th = document.createElement('th')
@@ -393,4 +394,60 @@ getReporting.addEventListener('click',()=>{
     fetchReqForReporting()
 })
 
+function fetchReqForReporting()
+{
+    fetch('/getReportForSeller')
+    .then(async res=>{
+        if(res.status==500){
+            alert('Internal server error')
+            return
+        }
+        res = await res.json()
+        displayReoprt(res)
+    })
+    .catch(err=>{
+        console.log(err)
+    })
+}
 
+function createTableDiv(title,table){
+    let div = document.createElement('div')
+    let h1 = document.createElement('h1')
+    h1.innerHTML = title
+    h1.setAttribute('class','text-center text-decoration-underline mt-3')
+    div.appendChild(h1)
+    div.appendChild(table)
+    return div
+}
+function displayReoprt(obj){
+    let bestSellers = obj.bestSellers
+    let leastSellers = obj.leastSellers
+    let tablesDiv = document.createElement('div')
+    let bestSellersTable = createTable(bestSellers)
+    let leastSellersTable = createTable(leastSellers)
+    let bestSellerDiv = createTableDiv('BEST SELLERS',bestSellersTable)
+    let leastSellerDiv = createTableDiv('LEAST SELLERS',leastSellersTable)
+    leastSellerDiv.setAttribute('class','mb-3')
+    tablesDiv.appendChild(bestSellerDiv)
+    // tablesDiv.appendChild(document.createElement('hr'))
+    tablesDiv.appendChild(leastSellerDiv)
+    mainDiv.appendChild(tablesDiv)
+}
+
+function createTable(data){
+    if(data.length>0){
+        let table = document.createElement('table')
+        table.setAttribute('class','p-lg-3 p-md-2 p-sm-2 border border-dark text-center')
+        let tableHeader = createTableHeader((Object.keys(data[0])))
+        table.appendChild(tableHeader)
+        let tableBody = document.createElement('tbody')
+        for(let i=0;i<data.length;i++){
+            let p = createRow(data[i],i+1)
+            tableBody.appendChild(p)
+        }
+        table.appendChild(tableBody)
+        mainDiv.innerHTML = ''
+        mainDiv.appendChild(table)
+        return table
+    }
+}

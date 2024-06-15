@@ -207,6 +207,41 @@ let handleDispatchOrder = async(req,res)=>{
         res.status(500).send()
     }
 }
+let handleGetReport = async(req,res)=>{
+    try {
+        const{emailId}=req.session.userInfo
+        let bestSellerQuery = 'SELECT PRODUCT,SUM(VOLUME) AS VOLUME FROM ORDERS WHERE SELLEREMAILID=? GROUP BY PRODUCT ORDER BY VOLUME DESC'
+        let products = (await connect.execute(bestSellerQuery,[emailId]))[0]
+        let resObj ={}
+        let bestSellers = []
+        let leastSellers = []
+        if(products.length<10){
+            bestSellers = products.splice(0,products.length/2)
+            leastSellers = products.splice(products.length/2,)
+        }
+        else{
+            bestSellers = products.splice(0,5)
+            leastSellers = products.splice(products.length-5,products.length-1)
+        }
+        resObj.bestSellers = []
+        resObj.leastSellers = []
+        let productDetailsQuery = 'SELECT PD.id,PD.name,PD.category,PD.brand,PM.volume,PM.price,PM.discount,PM.listed FROM PRODUCTDETAILS AS PD JOIN PRODUCTMETRICS AS PM ON PD.ID=PM.ID WHERE PM.ID=?'
+        for(let i=0;i<bestSellers.length;i++){
+            let product = ((await connect.execute(productDetailsQuery,[bestSellers[i].PRODUCT]))[0])[0]
+            product.soldUnits = bestSellers[i].VOLUME
+            resObj.bestSellers.push(product)
+        }
+        for(let i=0;i<leastSellers.length;i++){
+            let product = ((await connect.execute(productDetailsQuery,[leastSellers[i].PRODUCT]))[0])[0]
+            product.soldUnits = leastSellers[i].VOLUME
+            resObj.leastSellers.push(product)
+        }
+        res.status(200).json(resObj)
+    } catch (error) {
+        console.log(error)
+        res.status(500).send()
+    }
+}
 export{
     handleListedProducts,
     handleDeleteProduct,
@@ -214,5 +249,6 @@ export{
     handleInsertNewProductDetails,
     handleAddNewProduct,
     handleSellerOrders,
-    handleDispatchOrder
+    handleDispatchOrder,
+    handleGetReport
 }

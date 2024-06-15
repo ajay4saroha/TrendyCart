@@ -1,6 +1,6 @@
 import express from 'express'
 const sellerRoute = express.Router()
-import { handleAddNewProduct,handleListedProducts,handleUpdateProductDetails,handleInsertNewProductDetails,handleDeleteProduct,handleSellerOrders,handleDispatchOrder} from '../controllers/handleSeller.js'
+import { handleAddNewProduct,handleListedProducts,handleUpdateProductDetails,handleInsertNewProductDetails,handleDeleteProduct,handleSellerOrders,handleDispatchOrder,handleGetReport} from '../controllers/handleSeller.js'
 import { sellerLoginMiddleware } from '../middlewares/sellerMiddleware.js'
 import { imageHandler } from '../middlewares/imageHandler.js'
 /////// MIDDLEWARES ///////
@@ -14,6 +14,7 @@ sellerRoute.post('/updateProductDetails',handleUpdateProductDetails)
 sellerRoute.post('/insertNewProductDetails',handleInsertNewProductDetails)
 sellerRoute.get('/getSellerOrders',handleSellerOrders)
 sellerRoute.post('/dispatchOrder',handleDispatchOrder)
+sellerRoute.get('/getReportForSeller',handleGetReport)
 // sellerRoute.get('*',(req,res)=>{
 //     res.redirect('/')
 // })

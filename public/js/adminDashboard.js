@@ -4,8 +4,10 @@ let sellerReqDiv = document.getElementById('sellerReqNav')
 let getProductsDiv = document.getElementById('getProductsNav')
 let getOrdersDiv = document.getElementById('getOrdersNav')
 let addNewAdmin = document.getElementById('addNewAdminNav')
+let sellersReport = document.getElementById('getSellersReportNav')
+let buyersReport = document.getElementById('getBuyersReportNav')
 let mainDiv = document.getElementById('mainContentDiv')
-
+// mainDiv.setAttribute('class','d-flex flex-column justify-content-lg-center')
 // let tabs = [sellerReqDiv,managBuyerDiv,getProductsDiv,addNewAdmin]
 window.addEventListener('load',fetchReqToGetSeller())
 
@@ -86,8 +88,15 @@ function hideNewAdminForm(){
      formDiv.style.display='none'
 }
 
+sellersReport.addEventListener('click',()=>{
+  hideNewAdminForm()
+  fetchReqToGetSellersReport()
+})
 
-
+buyersReport.addEventListener('click',()=>{
+    hideNewAdminForm()
+    fetchReqToGetBuyersReport()
+})
 ////// create table header ////
 function createTableHeader(arr){
     let thead = document.createElement('thead')
@@ -110,10 +119,12 @@ function createTableHeader(arr){
         th.innerHTML = arr[i]
         thead.appendChild(th)
     }
-    let th = document.createElement('th')
-    th.setAttribute('class','p-lg-3 p-md-1 p-sm-1 border border-primary')
-    th.innerHTML = 'Action'
-    thead.appendChild(th)
+    if(arr.length>4){
+        let th = document.createElement('th')
+        th.setAttribute('class','p-lg-3 p-md-1 p-sm-1 border border-primary')
+        th.innerHTML = 'Action'
+        thead.appendChild(th)
+    }
     return thead
 }
 
@@ -206,8 +217,9 @@ function createRow(obj,count){
         td.appendChild(createProductBtn(obj))
         tr.appendChild(td)
     }
-
-    tr.appendChild(td)
+    if(Object.keys(obj).length>4){
+        tr.appendChild(td)   
+    }
     return tr
 }
 
@@ -296,6 +308,61 @@ function showSellerInfo(data){
     mainDiv.innerHTML='<h1 class="text-center text-decoration-underline">SELLER DETAILS</h1>'
     mainDiv.appendChild(table)
 }
+
+///// SELLER REPORT REQ ////
+function fetchReqToGetSellersReport(){
+    fetch('getSellersReportForAdmin')
+    .then(async res=>{
+        if(res.status==500){
+            alert('Error Occured')
+            return
+        }
+        res = await res.json()
+        displayReport(res,'Seller')
+    })
+    .catch(err=>{
+        console.log(err)
+    })
+}
+
+function displayReport(data,title){
+    let table = document.createElement('table')
+    table.setAttribute('class','m-lg-3 m-md-2 m-sm-1')
+    let tableHeader = createTableHeader(Object.keys(data[0]))
+    table.appendChild(tableHeader)
+    for(let i=0;i<data.length;i++){
+        let row = createRow(data[i],i+1)
+        table.appendChild(row)
+    }
+    if(title=='Seller'){
+         mainDiv.innerHTML='<h1 class="text-center text-decoration-underline">TOP SELLERS ORDER WISE</h1>'
+    }
+    else{
+         mainDiv.innerHTML='<h1 class="text-center text-decoration-underline">TOP BUYERS AMOUNT WISE</h1>'
+    }
+    mainDiv.appendChild(table)
+}
+
+
+/////// BUYERS REPORT REQ ///////
+function fetchReqToGetBuyersReport(){
+    fetch('/getBuyersReportForAdmin')
+    .then(async res=>{
+        if(res.status==500){
+            alert('Error Occured')
+            return
+        }
+        if(res.status==400){
+            location.href='/adminDashboard'
+        }
+        res = await res.json()
+        displayReport(res,'buyers')
+    })
+    .catch(err=>{
+        console.log(err)
+    })
+}
+
 
 
 /////// fetch req on admin action /////

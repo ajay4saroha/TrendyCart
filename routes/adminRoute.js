@@ -9,6 +9,8 @@ import { handleAdminDashboard,
     handleAddNewAdmin,
     handleGetAllProducts,
     handleRemoveProduct,
+    handleBuyersReport,
+    handleSellersReport
 } from '../controllers/handleAdmin.js'
 /////// MIDDLEWARES ///
 adminRoute.use(adminCheck)
@@ -22,7 +24,8 @@ adminRoute.post('/rejectSeller',handleRejectSeller)
 adminRoute.post('/addNewAdmin',handleAddNewAdmin)
 adminRoute.post('/getAllProducts',handleGetAllProducts)
 adminRoute.post('/removeEntireProduct',handleRemoveProduct)
-
+adminRoute.get('/getBuyersReportForAdmin',handleBuyersReport)
+adminRoute.get('/getSellersReportForAdmin',handleSellersReport)
 
 
 export{adminRoute}

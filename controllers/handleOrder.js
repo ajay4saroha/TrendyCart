@@ -67,7 +67,7 @@ let handleShowPreparedOrder = async(req,res)=>{
                 totalAmount += item.product.price * item.product.quantity
             }
         });
-        req.session.totalBill = totalAmount
+        req.session.totalBill = totalAmount.toFixed(2)
         res.render('dynamics/preparedOrder',{data:req.session})
     } catch (error) {
         console.log(error)

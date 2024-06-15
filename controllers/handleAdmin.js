@@ -210,6 +210,50 @@ let handleRemoveProduct = async(req,res)=>{
     }
 }
 
+let handleBuyersReport = async(req,res)=>{
+    try {
+        let query = 'select orderedBy,sum(bill) as orderAmountTillNow from orders group by orderedBy order by orderAmountTillNow desc limit 5'
+        let buyers = (await connect.execute(query))[0]
+        if(buyers.length==0){
+            res.status(400).send()
+            return
+        }
+        let resObj = []
+        let query1 = 'select name,role from users where emailid=?' 
+        for(let i=0;i<buyers.length;i++){
+            let user = ((await connect.execute(query1,[buyers[i].orderedBy]))[0])[0]
+            user.emailId = buyers[i].orderedBy
+            user.ordersAmountTillNow = (buyers[i].orderAmountTillNow).toFixed(2)
+            resObj.push(user)
+        }
+        res.status(200).json(resObj)
+    } catch (error) {
+        console.log(error)
+        res.status(500).send()
+    }
+}
+let handleSellersReport =async(req,res)=>{
+    try {
+        let query = 'select sellerEmailId,count(id) as totalOrder from orders group by selleremailid order by totalOrder desc limit 5'
+        let sellers = (await connect.execute(query))[0]
+        if(sellers.length==0){
+            res.status(400).send()
+            return
+        }
+        let resObj = []
+        let query1 = 'select name from users where emailid=?' 
+        for(let i=0;i<sellers.length;i++){
+            let user = ((await connect.execute(query1,[sellers[i].sellerEmailId]))[0])[0]
+            user.emailId = sellers[i].sellerEmailId
+            user.totalOrders = sellers[i].totalOrder
+            resObj.push(user)
+        }
+        res.status(200).json(resObj)
+    } catch (error) {
+        console.log(error)
+        res.status(500).send()
+    }
+}
 export{handleAdminDashboard,
     handleGetAllSellers,
     handleSuspendSeller,
@@ -218,5 +262,6 @@ export{handleAdminDashboard,
     handleAddNewAdmin,
     handleGetAllProducts,
     handleRemoveProduct,
-    
+    handleBuyersReport,
+    handleSellersReport
 }
