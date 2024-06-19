@@ -1,6 +1,8 @@
 //////////// PACKAGES //////////////
 import express, { urlencoded } from 'express'
 import ejs from 'ejs'
+import http from 'http'
+import {Server} from 'socket.io'
 import nodemailer from 'nodemailer'
 import { createSession } from './middlewares/createSession.js'
 import jwt from 'jsonwebtoken'
@@ -13,10 +15,27 @@ import { productRoute } from './routes/productRoute.js'
 import { adminRoute } from './routes/adminRoute.js'
 import { orderRoute } from './routes/orderRoute.js'
 import { distributerRoute } from './routes/distributorRoute.js'
+import { connectSocket } from './controllers/handleHelpSupport.js'
 ////////// SERVER CONFIGURATION /////////
 const app = express()
 const PORT = 4000
 app.set('view engine','ejs')
+
+/////// SERVER START /////////
+const server = http.createServer(app)
+
+////////// chatting fucntionality start ////////
+
+const io = new Server(server)
+io.on('connection',connectSocket)
+////////// chatting fucntionality end////////
+
+
+server.listen(PORT,async ()=>{
+    console.log(`SERVER STARTED AT PORT ${PORT}`)
+    connectDB()
+})
+
 
 //////// MIDDLEWARES //////////
 app.use(createSession)
@@ -92,9 +111,4 @@ app.get('/cancelOrder',orderRoute)
 app.get('*',homeRoute)
 app.post('*',homeRoute)
 
-
-/////// SERVER START /////////
-app.listen(PORT,async ()=>{
-    console.log(`SERVER STARTED AT PORT ${PORT}`)
-    connectDB()
-})
+export{io}

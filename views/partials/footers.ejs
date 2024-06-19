@@ -1,3 +1,107 @@
+
+<h1 class="" style="position: fixed; top: 9vh; left: 95%;">
+    <button class="btn btn-warning" id="showHelpDivBtn">
+        <i class="bi bi-chat-dots"></i>
+    </button>
+</h1>
+<div id="helpAndSupportDiv" class="border border-info bg-dark text-light w-50" style="display: none; position: absolute; top: 18vh; left: 25%; height: 500px;">
+    <div class="row mt-2">
+        <div class="col-9 m-1">
+            <h3 class="text-center">Help & Support</h3>
+        </div>
+        <div class="col-2 m-1 d-flex justify-content-lg-end">
+            <button class="btn btn-danger" id="closeHelpBtn">
+                <i class="bi bi-x-circle">
+                </i>
+            </button>
+        </div>
+    </div>
+    <hr>
+    <div id="chatSection" style="height: 70%;" class="m-1"></div>
+    <div id="querySection">
+        <form id="sendMessageForm">
+            <div class="row mt-2 justify-content-lg-center">
+                <div class="col-9 m-1">
+                    <input type="hidden" id="recepient" name="email" class="form-control">
+                    <input type="text" id="query" name="message" class="form-control" placeholder="Write your message">
+                </div>
+                <div class="col-2 m-1">
+                    <button class="btn btn-outline-info" title="Send Query" id="sendQueryBtn" type="submit">
+                        <i class="bi bi-send"></i>
+                    </button>
+                </div>
+            </div> 
+        </form>
+    </div>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    let closeHelpBtn = document.getElementById('closeHelpBtn')
+    let showHelpBtn = document.getElementById('showHelpDivBtn')
+    let helpDiv = document.getElementById('helpAndSupportDiv')
+    let sendQueryBtn = document.getElementById('sendQueryBtn')
+    let query = document.getElementById('query')
+    let chatSection = document.getElementById('chatSection')
+    let recepient = document.getElementById('recepient')
+    function showHelpDiv(elem){
+        if(elem.style.display=='none'){
+            elem.style.display= 'block'
+        }
+    }
+    function closeHelpDiv(elem){
+        if(elem.style.display!='none'){
+            elem.style.display='none'
+        }
+    }
+    
+    ///////// show and close for chatting /////
+    let socket = io()
+    closeHelpBtn.addEventListener('click',()=>{
+        closeHelpDiv(helpDiv)
+    })
+    showHelpBtn.addEventListener('click',()=>{
+        fetch('/startChat')
+        .then(async res=>{
+            if(res.status==400){
+                alert('Login to start chat')
+                return
+            }
+            if(res.status==500){
+                alert('Error Occured')
+                return
+            }
+            let {emailId} = await res.json()
+            recepient.value = emailId
+            socket.emit('mapEmailAndSocket',{socketId:socket.id,emailId:emailId})
+            showHelpDiv(helpDiv)
+        })
+        .catch(err=>{
+            console.log(err)
+        })
+    })
+
+    
+    ////////// initiate chatting /////////
+    let sendMsgForm = document.getElementById('sendMessageForm')
+    sendMsgForm.addEventListener('submit',(event)=>{
+        event.preventDefault()
+        let formData = new FormData(sendMsgForm)
+        let obj = {}
+        formData.forEach((val,key) => {
+            obj[key] = val
+        });
+        socket.emit('sendMsgTo',obj)
+        let p = document.createElement('p')
+        p.innerText = `You : ${obj.message}`
+        chatSection.appendChild(p)  
+    })
+    socket.on('newMsg',data=>{
+        let p = document.createElement('p')
+        p.innerText = `User : ${data}`
+        chatSection.appendChild(p)
+    })
+</script>
+
 <script src="js/navbarScript.js"></script>
 <script src="js/homepageScript.js"></script>
 <script src="js/userCartScript.js"></script>

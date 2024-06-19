@@ -1,4 +1,6 @@
 import { connect } from "../database.js"
+import { io } from "../server.js"
+
 let handleHome = async(req,res)=>{
     if(req.session.userInfo){
         let seller = (await connect.execute('SELECT * FROM SELLERS WHERE EMAILID=?',[req.session.userInfo.emailId]))[0]
@@ -13,4 +15,18 @@ let handleLoadProducts = async(req,res)=>{
     let productsList = (await connect.query(query))[0]
     res.json(productsList)
 }
-export{handleHome,handleLoadProducts}
+let handleStartChat = async(req,res)=>{
+    try {
+        if(!req.session.userInfo){
+            res.status(400).send()
+            return
+        }
+        res.status(200).json({emailId:req.session.userInfo.emailId}) 
+    } catch (error) {
+        console.log(error)
+        res.status(500).send()
+    }
+    
+}
+
+export{handleHome,handleLoadProducts,handleStartChat}
