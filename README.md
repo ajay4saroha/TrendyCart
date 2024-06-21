@@ -11,11 +11,12 @@ This project is an e-commerce website designed to provide a seamless online shop
 - Checkout Process with Payment Integration
 - Order History and Tracking
 - Admin Panel for Product and Order Management
+- Help and Support
 
 ## Technologies Used
 - Frontend: HTML, CSS, JavaScript, React
 - Backend: Node.js, Express
-- Database: MongoDB
+- Database: MySQL
 - Authentication: JWT
 
 ## Installation
