@@ -17,22 +17,30 @@
         </div>
     </div>
     <hr>
-    <div id="chatSection" style="height: 70%;" class="m-1"></div>
-    <div id="querySection">
-        <form id="sendMessageForm">
-            <div class="row mt-2 justify-content-lg-center">
-                <div class="col-9 m-1">
-                    <input type="hidden" id="recepient" name="email" class="form-control">
-                    <input type="text" id="query" name="message" class="form-control" placeholder="Write your message">
-                </div>
-                <div class="col-2 m-1">
-                    <button class="btn btn-outline-info" title="Send Query" id="sendQueryBtn" type="submit">
-                        <i class="bi bi-send"></i>
-                    </button>
-                </div>
-            </div> 
-        </form>
+    <div class="row">
+        <div class="col-lg-8 d-flex flex-column justify-content-lg-end">
+            <div id="chatSection" style="height: 50vh;overflow-y: scroll;" class="m-1"></div>
+            <div id="querySection">
+                <form id="sendMessageForm">
+                    <div class="row mt-2 justify-content-lg-center">
+                        <div class="col-9 m-1">
+                            <input type="hidden" id="recepient" name="email" class="form-control">
+                            <input type="text" id="query" name="message" class="form-control" placeholder="Write your message">
+                        </div>
+                        <div class="col-2 m-1">
+                            <button class="btn btn-outline-info" title="Send Query" id="sendQueryBtn" type="submit">
+                                <i class="bi bi-send"></i>
+                            </button>
+                        </div>
+                    </div> 
+                </form>
+            </div>
+        </div>
+        <% if(data && data.emailId==='ajay3saroha@gmail.com'){%>
+            <div class="col-lg-3" id="usersListDiv"></div>
+        <% } %>
     </div>
+    
 </div>
 <script src="/socket.io/socket.io.js"></script>
 <script>
@@ -43,7 +51,76 @@
     let query = document.getElementById('query')
     let chatSection = document.getElementById('chatSection')
     let recepient = document.getElementById('recepient')
+    let usersListDiv = document.getElementById('usersListDiv')
+    
+    if(usersListDiv){
+        var interval = setInterval(getUsers,1000)
+    }
+    
+    function getUsers (){
+        fetch('/getUsersForChat')
+        .then(async res=>{
+            if(res.status===500){
+                alert('Error Occured')
+                return
+            }
+            else if(res.status==400){
+                alert('Login First')
+                return
+            }
+            res.json()
+            .then(res=>{
+                res = res.filter(user=>user.emailId!==recepient.value)
+                displayUsers(res)
+            })
+            .catch(err=>console.log(err))
+        })
+    }
+    function displayUsers(data){
+        let ul = document.createElement('ul')
+        ul.setAttribute('class','list-group')
+        ul.setAttribute('id','listOfUsers')
+        for(let i=0;i<data.length;i++){
+            let li = document.createElement('li')
+            li.innerHTML = data[i].emailId.replace('@gmail.com','')
+            li.setAttribute('id',data[i].socketId)
+            if(data[i].engaged){
+                li.setAttribute('class','list-group-item text-wrap bg-success')
+            }
+            else{
+                li.setAttribute('class','list-group-item text-wrap bg-warning')
+            }
+            
+            li.addEventListener('click',()=>{
+                console.log(li.getAttribute('id'))
+                let id = li.getAttribute('id')
+                clearInterval(interval)
+                fetch('/changeChatUser',{
+                    method:'post',
+                    headers:{
+                        'Content-type':'application/json'
+                    },
+                    body:JSON.stringify({socketId:id})
+                })
+                .then(res=>{
+                    if(res.status==500){
+                        alert('Internal Server Error')
+                    }
+                    else if(res.status==200){
+                        interval = setInterval(getUsers,1000)
+                    }
+                })
+                .catch(err=>{
+                    console.log(err)
+                })
+            })
+            ul.appendChild(li)
+        }
+        usersListDiv.innerHTML =""
+        usersListDiv.appendChild(ul)
+    }
     function showHelpDiv(elem){
+
         if(elem.style.display=='none'){
             elem.style.display= 'block'
         }
@@ -57,6 +134,8 @@
     ///////// show and close for chatting /////
     let socket = io()
     closeHelpBtn.addEventListener('click',()=>{
+        showHelpBtn.disabled = false
+        socket.emit('closeChat',{email:recepient.value})
         closeHelpDiv(helpDiv)
     })
     showHelpBtn.addEventListener('click',()=>{
@@ -74,6 +153,7 @@
             recepient.value = emailId
             socket.emit('mapEmailAndSocket',{socketId:socket.id,emailId:emailId})
             showHelpDiv(helpDiv)
+            // showHelpBtn.disabled = true
         })
         .catch(err=>{
             console.log(err)
@@ -97,8 +177,16 @@
     })
     socket.on('newMsg',data=>{
         let p = document.createElement('p')
-        p.innerText = `User : ${data}`
+        p.innerText = `${data.user} : ${data.msg}`
         chatSection.appendChild(p)
+    })
+    socket.on('alreadyEngaged',data=>{
+        chatSection.innerText = ''
+        alert('Agent is busy with another user please wait')
+    })
+    socket.on('unavailable',data=>{
+        chatSection.innerText = ''
+        alert('Agent is not available')
     })
 </script>
 
