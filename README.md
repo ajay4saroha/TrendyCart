@@ -5,12 +5,14 @@ This project is an e-commerce website designed to provide a seamless online shop
 
 ## Features
 - User Authentication (Sign Up, Log In, Log Out)
-- Product Listings with Search and Filter
+- Product Listings
 - Product Detail Pages
 - Shopping Cart Management
-- Checkout Process with Payment Integration
+- Checkout Process
 - Order History and Tracking
-- Admin Panel for Product and Order Management
+- Admin Panel for users and sellers management and reporting
+- Seller Panel for product management and reporting
+- Transporter Panel to delivery management
 - Help and Support
 
 ## Technologies Used
