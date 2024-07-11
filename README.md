@@ -16,7 +16,7 @@ This project is an e-commerce website designed to provide a seamless online shop
 - Help and Support
 
 ## Technologies Used
-- Frontend: HTML, CSS, JavaScript, React
+- Frontend: HTML, CSS, JavaScript, Bootstrap
 - Backend: Node.js, Express
 - Database: MySQL
 - Authentication: JWT
