@@ -1,5 +1,5 @@
 # TrendyCart
-
+## LIVE: https://trendycart-9z7o.onrender.com/#
 ## Description
 This project is an e-commerce website designed to provide a seamless online shopping experience. It includes features such as product listings, shopping cart, checkout process, user authentication, and order management.
 
