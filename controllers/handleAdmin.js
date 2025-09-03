@@ -222,7 +222,7 @@ let handleBuyersReport = async(req,res)=>{
         let query1 = 'select name,role from users where emailid=?' 
         for(let i=0;i<buyers.length;i++){
             let user = ((await connect.execute(query1,[buyers[i].orderedBy]))[0])[0]
-            user.emailId = buyers[i].orderedBy
+            user.emailId = buyers[i]?.orderedBy
             user.ordersAmountTillNow = (buyers[i].orderAmountTillNow).toFixed(2)
             resObj.push(user)
         }
