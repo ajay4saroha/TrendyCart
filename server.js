@@ -12,8 +12,10 @@ import { adminRoute } from './routes/adminRoute.js'
 import { orderRoute } from './routes/orderRoute.js'
 import { distributerRoute } from './routes/distributorRoute.js'
 import { connectSocket } from './controllers/handleHelpSupport.js'
+import dotenv from 'dotenv'
 
 ////////// SERVER CONFIGURATION /////////
+dotenv.config()
 const app = express()
 const PORT = 4000
 app.set('view engine','ejs')
